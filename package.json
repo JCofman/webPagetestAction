@@ -1,0 +1,32 @@
+{
+  "name": "webpagetestaction",
+  "version": "1.0.0",
+  "description": "github action which prints webpagetest results",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JCofman/webPagetestAction.git"
+  },
+  "keywords": [
+    "github",
+    "actions",
+    "webpagetest",
+    "speed",
+    "performance",
+    "web",
+    "performance"
+  ],
+  "author": "Jacob Cofman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JCofman/webPagetestAction/issues"
+  },
+  "homepage": "https://github.com/JCofman/webPagetestAction#readme",
+  "dependencies": {
+    "actions-toolkit": "^1.5.0",
+    "webpagetest": "^0.3.9"
+  }
+}

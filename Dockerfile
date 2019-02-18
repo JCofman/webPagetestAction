@@ -1,19 +1,31 @@
+# Use the latest version of Node.js
+#
+# You may prefer the full image:
+# FROM node
+#
+# or even an alpine image (a smaller, faster, less-feature-complete image):
+# FROM node:alpine
+#
+# You can specify a version:
+# FROM node:10-slim
 FROM node:slim
 
-# A bunch of `LABEL` fields for GitHub to index
-LABEL "com.github.actions.name"="WebPageTestActions"
+# Labels for GitHub to read your action
+LABEL "com.github.actions.name"="WebPageTestAction"
 LABEL "com.github.actions.description"="Print webPagetest.org results"
+# Here all of the available icons: https://feathericons.com/
 LABEL "com.github.actions.icon"="zap"
-LABEL "com.github.actions.color"="white"
-LABEL "repository"="https://github.com/JCofman/webPagetestAction"
-LABEL "homepage"="https://github.com/JCofman/webPagetestAction"
-LABEL "maintainer"="Jacob Cofman <cofman.jacob@gmail.com>"
+# And all of the available colors: https://developer.github.com/actions/creating-github-actions/creating-a-docker-container/#label
+LABEL "com.github.actions.color"="gray-dark"
 
-# Copy over project files
-COPY . .
+# Copy the package.json and package-lock.json
+COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm ci
 
-# This is what GitHub will run
-ENTRYPOINT ["node", "/index.js"]
+# Copy the rest of your action's code
+COPY . .
+
+# Run `node /entrypoint.js`
+ENTRYPOINT ["node", "/entrypoint.js"]

@@ -11,77 +11,85 @@ const { webPagetestTestUrl, webpagetestApiKey } = require("minimist")(
 console.log(webPagetestTestUrl);
 console.log(webpagetestApiKey);
 
-const { event, payload, arguments } = tools.context;
+const { event, payload, arguments, sha } = tools.context;
+run();
 
-if (event === "pull_request") {
-  console.log(payload);
-  console.log(arguments);
+async function run() {
+  console.log(await Promise.resolve("hello world"));
+  if (event === "push") {
+    console.log(payload);
+    console.log(arguments);
 
-  // 1. An authenticated instance of `@octokit/rest`, a GitHub API SDK
-  const octokit = tools.createOctokit();
+    // 1. An authenticated instance of `@octokit/rest`, a GitHub API SDK
+    const octokit = tools.createOctokit();
 
-  // 2. run tests and save results
-  const webpagetestResults = runWebPagetest();
+    // 2. run tests and save results
+    const webpagetestResults = runWebPagetest();
 
-  // 3. convert results to markdown
-  const finalResultsAsMarkdown = convertToMarkdown(webpagetestResults);
-  // 4. print results to pull requests
-  const {
-    params: { owner, repo }
-  } = tools.context.repo({ path: ".github/config.yml" });
+    // 3. convert results to markdown
+    const finalResultsAsMarkdown = convertToMarkdown(webpagetestResults);
+    // 4. print results to pull requests
+    const {
+      params: { owner, repo }
+    } = tools.context.repo({ path: ".github/config.yml" });
 
-  const result = await octokit.pulls.createComment({
-    owner,
-    repo,
-    number,
-    body: finalResultsAsMarkdown
-  });
-
-  /**
-   * get latest commit
-   * and push webpagetest results as comment to latest commit
-   */
-  octokit.repos
-    .getCommit({ owner: myOwner, repo: myRepo, sha: gitBranch })
-    .then(commit => {
-      return github.repos.createCommitComment({
-        owner: myOwner,
-        repo: myRepo,
-        sha: commit.data.sha,
-        body: dataAsMarkdown
-      });
-    })
-    .catch(error => {
-      console.log(`ERROR could either not get commits of the repo ${myRepo} of the owner ${myOwner}
-              or could not sent the commit to the repositorie ERRORMSG: ${error}
-              `);
+    const result = await octokit.repos.createCommitComment({
+      owner,
+      repo,
+      sha,
+      body: finalResultsAsMarkdown
     });
-  // Delete the branch
-  //   octokit.git
-  //     .deleteRef(
-  //       tools.context.repo({
-  //         ref: `heads/${payload.pull_request.head.ref}`
-  //       })
-  //     )
-  //     .then(() => {
-  //       console.log(`Branch ${payload.pull_request.head.ref} deleted!`);
-  //     });
+
+    // /**
+    //  * get latest commit
+    //  * and push webpagetest results as comment to latest commit
+    //  */
+    // octokit.repos
+    //   .getCommit({ owner: myOwner, repo: myRepo, sha: gitBranch })
+    //   .then(commit => {
+    //     return github.repos.createCommitComment({
+    //       owner: myOwner,
+    //       repo: myRepo,
+    //       sha: commit.data.sha,
+    //       body: dataAsMarkdown
+    //     });
+    //   })
+    //   .catch(error => {
+    //     console.log(`ERROR could either not get commits of the repo ${myRepo} of the owner ${myOwner}
+    //             or could not sent the commit to the repositorie ERRORMSG: ${error}
+    //             `);
+    //   });
+    // Delete the branch
+    //   octokit.git
+    //     .deleteRef(
+    //       tools.context.repo({
+    //         ref: `heads/${payload.pull_request.head.ref}`
+    //       })
+    //     )
+    //     .then(() => {
+    //       console.log(`Branch ${payload.pull_request.head.ref} deleted!`);
+    //     });
+  }
 }
 
 function runWebPagetest() {
   // initialize
   const wpt = new webPageTest("www.webpagetest.org", webpagetestApiKey);
   wpt.runTest(
-    testURL,
+    testURL || "https://jcofman.de",
     {
-      video: true,
-      pollResults: 5,
-      location: "Dulles_MotoG4",
-      connectivity: "3GSlow",
-      mobile: 1,
-      device: "Motorola G (gen 4)",
-      timeout: 1000,
-      lighthouse: true
+      location: location || "Dulles_MotoG4", // <location> string to test from https://www.webpagetest.org/getLocations.php?f=html
+      connectivity: connectivity || "3GSlow", // <profile> string: connectivity profile -- requires location to be specified -- (Cable|DSL|3GSlow|3G|3GFast|4G|LTE|Edge|2G|Dial|FIOS|Native|custom) [Cable]
+      runs: runs || 1, // <number>: number of test runs [1]
+      first: first || false, // skip the Repeat View test
+      video: video || true, // capture video
+      pollResults: pollResults || 5, // <number>: poll results
+      private: private || false, // keep the test hidden from the test log
+      label: label || "", // <label>: string label for the test
+      mobile: mobile || 1,
+      device: device || "Motorola G (gen 4)",
+      timeout: timeout || 1000,
+      lighthouse: lighthouse || true
     },
     function(err, result) {
       if (err) {

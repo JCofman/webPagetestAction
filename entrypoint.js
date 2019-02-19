@@ -5,7 +5,6 @@ const tools = new Toolkit();
 const webPageTest = require("webpagetest");
 
 const { event, payload, arguments, sha } = tools.context;
-let dataAsMarkdown;
 run();
 
 async function run() {
@@ -18,12 +17,13 @@ async function run() {
       // 1. An authenticated instance of `@octokit/rest`, a GitHub API SDK
       const octokit = tools.createOctokit();
 
-      // 2. run tests
-      await runWebPagetest();
+      // 2. run tests and save results
+      const webpagetestResults = await runWebPagetest();
+      console.log(webpagetestResults);
 
       // 3. convert results to markdown
-      // const finalResultsAsMarkdown = convertToMarkdown(webpagetestResults);
-
+      const finalResultsAsMarkdown = convertToMarkdown(webpagetestResults);
+      console.log(finalResultsAsMarkdown);
       // 4. print results to pull requests
       const {
         params: { owner, repo }
@@ -33,7 +33,7 @@ async function run() {
         owner,
         repo,
         sha,
-        body: dataAsMarkdown
+        body: finalResultsAsMarkdown
       });
     }
   } catch (error) {
@@ -74,7 +74,7 @@ async function run() {
 async function runWebPagetest() {
   // initialize
   const wpt = new webPageTest("www.webpagetest.org", webpagetestApiKey);
-  wpt.runTest(
+  const results = await wpt.runTest(
     testURL || "https://jcofman.de",
     {
       location: location || "Dulles_MotoG4", // <location> string to test from https://www.webpagetest.org/getLocations.php?f=html
@@ -95,14 +95,15 @@ async function runWebPagetest() {
         console.log(err);
       }
       if (result) {
-        convertToMarkdown(result);
+        return result;
       }
     }
   );
+  return results;
 }
 
 function convertToMarkdown(result) {
-  dataAsMarkdown = `
+  let dataAsMarkdown = `
   # WebpageTest report
   * run id: ${result.data.id}
   * URL testid: ${result.data.testUrl}

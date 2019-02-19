@@ -4,75 +4,74 @@ const { Toolkit } = require("actions-toolkit");
 const tools = new Toolkit();
 const webPageTest = require("webpagetest");
 
-const { webPagetestTestUrl, webpagetestApiKey } = require("minimist")(
-  process.argv.slice(1)
-);
-
-console.log(webPagetestTestUrl);
-console.log(webpagetestApiKey);
-
 const { event, payload, arguments, sha } = tools.context;
+let dataAsMarkdown;
 run();
 
 async function run() {
-  console.log(await Promise.resolve("hello world"));
-  if (event === "push") {
-    console.log(payload);
-    console.log(arguments);
+  try {
+    console.log(await Promise.resolve("hello world"));
+    if (event === "push") {
+      console.log(payload);
+      console.log(arguments);
 
-    // 1. An authenticated instance of `@octokit/rest`, a GitHub API SDK
-    const octokit = tools.createOctokit();
+      // 1. An authenticated instance of `@octokit/rest`, a GitHub API SDK
+      const octokit = tools.createOctokit();
 
-    // 2. run tests and save results
-    const webpagetestResults = runWebPagetest();
+      // 2. run tests
+      await runWebPagetest();
 
-    // 3. convert results to markdown
-    const finalResultsAsMarkdown = convertToMarkdown(webpagetestResults);
-    // 4. print results to pull requests
-    const {
-      params: { owner, repo }
-    } = tools.context.repo({ path: ".github/config.yml" });
+      // 3. convert results to markdown
+      // const finalResultsAsMarkdown = convertToMarkdown(webpagetestResults);
 
-    const result = await octokit.repos.createCommitComment({
-      owner,
-      repo,
-      sha,
-      body: finalResultsAsMarkdown
-    });
+      // 4. print results to pull requests
+      const {
+        params: { owner, repo }
+      } = tools.context.repo({ path: ".github/config.yml" });
 
-    // /**
-    //  * get latest commit
-    //  * and push webpagetest results as comment to latest commit
-    //  */
-    // octokit.repos
-    //   .getCommit({ owner: myOwner, repo: myRepo, sha: gitBranch })
-    //   .then(commit => {
-    //     return github.repos.createCommitComment({
-    //       owner: myOwner,
-    //       repo: myRepo,
-    //       sha: commit.data.sha,
-    //       body: dataAsMarkdown
-    //     });
-    //   })
-    //   .catch(error => {
-    //     console.log(`ERROR could either not get commits of the repo ${myRepo} of the owner ${myOwner}
-    //             or could not sent the commit to the repositorie ERRORMSG: ${error}
-    //             `);
-    //   });
-    // Delete the branch
-    //   octokit.git
-    //     .deleteRef(
-    //       tools.context.repo({
-    //         ref: `heads/${payload.pull_request.head.ref}`
-    //       })
-    //     )
-    //     .then(() => {
-    //       console.log(`Branch ${payload.pull_request.head.ref} deleted!`);
-    //     });
+      const result = await octokit.repos.createCommitComment({
+        owner,
+        repo,
+        sha,
+        body: dataAsMarkdown
+      });
+    }
+  } catch (error) {
+    console.log(error);
   }
 }
 
-function runWebPagetest() {
+// /**
+//  * get latest commit
+//  * and push webpagetest results as comment to latest commit
+//  */
+// octokit.repos
+//   .getCommit({ owner: myOwner, repo: myRepo, sha: gitBranch })
+//   .then(commit => {
+//     return github.repos.createCommitComment({
+//       owner: myOwner,
+//       repo: myRepo,
+//       sha: commit.data.sha,
+//       body: dataAsMarkdown
+//     });
+//   })
+//   .catch(error => {
+//     console.log(`ERROR could either not get commits of the repo ${myRepo} of the owner ${myOwner}
+//             or could not sent the commit to the repositorie ERRORMSG: ${error}
+//             `);
+//   });
+// Delete the branch
+//   octokit.git
+//     .deleteRef(
+//       tools.context.repo({
+//         ref: `heads/${payload.pull_request.head.ref}`
+//       })
+//     )
+//     .then(() => {
+//       console.log(`Branch ${payload.pull_request.head.ref} deleted!`);
+//     });
+
+async function runWebPagetest() {
   // initialize
   const wpt = new webPageTest("www.webpagetest.org", webpagetestApiKey);
   wpt.runTest(
@@ -103,7 +102,7 @@ function runWebPagetest() {
 }
 
 function convertToMarkdown(result) {
-  let dataAsMarkdown = `
+  dataAsMarkdown = `
   # WebpageTest report
   * run id: ${result.data.id}
   * URL testid: ${result.data.testUrl}

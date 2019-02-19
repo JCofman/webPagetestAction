@@ -27,5 +27,5 @@ RUN npm ci
 # Copy the rest of your action's code
 COPY . .
 
-# Run `node /entrypoint.js`
-ENTRYPOINT ["node", "/entrypoint.js"]
+# Run `entrypoint.sh`
+ENTRYPOINT ["/entrypoint.sh"]

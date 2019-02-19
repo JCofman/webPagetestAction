@@ -9,6 +9,7 @@ run();
 async function run() {
   try {
     if (event === "push") {
+      console.log(payload);
       console.log(arguments);
       tools.log("Welcome to this example!");
       // 1. An authenticated instance of `@octokit/rest`, a GitHub API SDK
@@ -71,7 +72,10 @@ async function run() {
 
 async function runWebPagetest() {
   // initialize
-  const wpt = new webPageTest("www.webpagetest.org", WEBPAGETEST_API_KEY);
+  const wpt = new webPageTest(
+    "www.webpagetest.org",
+    process.env.WEBPAGETEST_API_KEY
+  );
   const results = await wpt.runTest(
     TEST_URL || "https://jcofman.de",
     {

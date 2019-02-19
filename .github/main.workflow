@@ -9,5 +9,7 @@ action "WebPageTestActions" {
     "GITHUB_TOKEN",
     "WEBPAGETEST_API_KEY",
   ]
-  args = "TEST_URL"
+  env = {
+    TEST_URL = "https://jcofman.de"
+  }
 }

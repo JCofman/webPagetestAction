@@ -9,7 +9,6 @@ run();
 async function run() {
   try {
     if (event === "push") {
-      console.log(payload);
       console.log(arguments);
       tools.log("Welcome to this example!");
       // 1. An authenticated instance of `@octokit/rest`, a GitHub API SDK
@@ -72,9 +71,9 @@ async function run() {
 
 async function runWebPagetest() {
   // initialize
-  const wpt = new webPageTest("www.webpagetest.org", webpagetestApiKey);
+  const wpt = new webPageTest("www.webpagetest.org", WEBPAGETEST_API_KEY);
   const results = await wpt.runTest(
-    testURL || "https://jcofman.de",
+    TEST_URL || "https://jcofman.de",
     {
       location: location || "Dulles_MotoG4", // <location> string to test from https://www.webpagetest.org/getLocations.php?f=html
       connectivity: connectivity || "3GSlow", // <profile> string: connectivity profile -- requires location to be specified -- (Cable|DSL|3GSlow|3G|3GFast|4G|LTE|Edge|2G|Dial|FIOS|Native|custom) [Cable]

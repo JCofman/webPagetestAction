@@ -1,4 +1,3 @@
-console.log("hello world");
 // index.js
 const { Toolkit } = require("actions-toolkit");
 const tools = new Toolkit();
@@ -9,17 +8,17 @@ run();
 
 async function run() {
   try {
-    console.log(await Promise.resolve("hello world"));
     if (event === "push") {
       console.log(payload);
       console.log(arguments);
-
+      tools.log("Welcome to this example!");
       // 1. An authenticated instance of `@octokit/rest`, a GitHub API SDK
-      const octokit = tools.createOctokit();
+      const octokit = tools.github;
 
       // 2. run tests and save results
+
       const webpagetestResults = await runWebPagetest();
-      console.log(webpagetestResults);
+      tools.log.success(webpagetestResults);
 
       // 3. convert results to markdown
       const finalResultsAsMarkdown = convertToMarkdown(webpagetestResults);

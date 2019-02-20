@@ -29,11 +29,7 @@ async function run() {
       // 3. convert results to markdown
       const finalResultsAsMarkdown = convertToMarkdown(webpagetestResults);
       // 4. print results to pull requests
-      const params = tools.context.repo({ ref: `${payload.ref}` });
-      console.log(params);
-      const {
-        params: { owner, repo }
-      } = tools.context.repo({ ref: `${payload.ref}` });
+      const { owner, repo } = tools.context.repo({ ref: `${payload.ref}` });
 
       const result = await octokit.repos.createCommitComment({
         owner,

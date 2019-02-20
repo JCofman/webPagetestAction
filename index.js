@@ -4,6 +4,10 @@ const tools = new Toolkit();
 const webPageTest = require("webpagetest");
 
 const { event, payload, arguments, sha } = tools.context;
+
+// check pre-requirements
+if (!checkForMissingEnv) tools.exit.failure("Failed!");
+// run the script
 run();
 
 async function run() {
@@ -14,15 +18,16 @@ async function run() {
       tools.log("Welcome to this example!");
       // 1. An authenticated instance of `@octokit/rest`, a GitHub API SDK
       const octokit = tools.github;
-
+      // initialize webPagetest
+      const wpt = new webPageTest(
+        "www.webpagetest.org",
+        process.env.WEBPAGETEST_API_KEY
+      );
       // 2. run tests and save results
-
-      const webpagetestResults = await runWebPagetest();
-      tools.log.success(webpagetestResults);
+      const webpagetestResults = await runWebPagetest(wpt);
 
       // 3. convert results to markdown
       const finalResultsAsMarkdown = convertToMarkdown(webpagetestResults);
-      console.log(finalResultsAsMarkdown);
       // 4. print results to pull requests
       const {
         params: { owner, repo }
@@ -34,78 +39,80 @@ async function run() {
         sha,
         body: finalResultsAsMarkdown
       });
+      tools.exit.success("Succesfully run!");
     }
   } catch (error) {
     console.log(error);
   }
 }
+/**
+ * Log warnings to the console for missing environment variables
+ */
+function checkForMissingEnv() {
+  const requiredEnvVars = [
+    "HOME",
+    "GITHUB_WORKFLOW",
+    "GITHUB_ACTION",
+    "GITHUB_ACTOR",
+    "GITHUB_REPOSITORY",
+    "GITHUB_EVENT_NAME",
+    "GITHUB_EVENT_PATH",
+    "GITHUB_WORKSPACE",
+    "GITHUB_SHA",
+    "GITHUB_REF",
+    "GITHUB_TOKEN",
+    "WEBPAGETEST_API_KEY"
+  ];
 
-// /**
-//  * get latest commit
-//  * and push webpagetest results as comment to latest commit
-//  */
-// octokit.repos
-//   .getCommit({ owner: myOwner, repo: myRepo, sha: gitBranch })
-//   .then(commit => {
-//     return github.repos.createCommitComment({
-//       owner: myOwner,
-//       repo: myRepo,
-//       sha: commit.data.sha,
-//       body: dataAsMarkdown
-//     });
-//   })
-//   .catch(error => {
-//     console.log(`ERROR could either not get commits of the repo ${myRepo} of the owner ${myOwner}
-//             or could not sent the commit to the repositorie ERRORMSG: ${error}
-//             `);
-//   });
-// Delete the branch
-//   octokit.git
-//     .deleteRef(
-//       tools.context.repo({
-//         ref: `heads/${payload.pull_request.head.ref}`
-//       })
-//     )
-//     .then(() => {
-//       console.log(`Branch ${payload.pull_request.head.ref} deleted!`);
-//     });
+  const requiredButMissing = requiredEnvVars.filter(
+    key => !process.env.hasOwnProperty(key)
+  );
+  if (requiredButMissing.length > 0) {
+    // This isn't being run inside of a GitHub Action environment!
+    const list = requiredButMissing.map(key => `- ${key}`).join("\n");
+    const warning = `There are environment variables missing from this runtime.\n${list}`;
+    tools.log.warn(warning);
+    return false;
+  } else {
+    return true;
+  }
+}
 
-async function runWebPagetest() {
-  // initialize
-  const wpt = new webPageTest(
-    "www.webpagetest.org",
-    process.env.WEBPAGETEST_API_KEY
-  );
-  const results = await wpt.runTest(
-    process.env.TEST_URL || "https://jcofman.de",
-    {
-      location: location || "Dulles_MotoG4", // <location> string to test from https://www.webpagetest.org/getLocations.php?f=html
-      connectivity: connectivity || "3GSlow", // <profile> string: connectivity profile -- requires location to be specified -- (Cable|DSL|3GSlow|3G|3GFast|4G|LTE|Edge|2G|Dial|FIOS|Native|custom) [Cable]
-      runs: runs || 1, // <number>: number of test runs [1]
-      first: first || false, // skip the Repeat View test
-      video: video || true, // capture video
-      pollResults: pollResults || 5, // <number>: poll results
-      private: private || false, // keep the test hidden from the test log
-      label: label || "", // <label>: string label for the test
-      mobile: mobile || 1,
-      device: device || "Motorola G (gen 4)",
-      timeout: timeout || 1000,
-      lighthouse: lighthouse || true
-    },
-    function(err, result) {
-      if (err) {
-        console.log(err);
+async function runWebPagetest(wpt) {
+  return new Promise((resolve, reject) => {
+    wpt.runTest(
+      process.env.TEST_URL || "https://jcofman.de",
+      {
+        location: process.env.location || "Dulles_MotoG4", // <location> string to test from https://www.webpagetest.org/getLocations.php?f=html
+        connectivity: process.env.connectivity || "3GSlow", // <profile> string: connectivity profile -- requires location to be specified -- (Cable|DSL|3GSlow|3G|3GFast|4G|LTE|Edge|2G|Dial|FIOS|Native|custom) [Cable]
+        runs: process.env.runs || 1, // <number>: number of test runs [1]
+        first: process.env.first || false, // skip the Repeat View test
+        video: process.env.video || true, // capture video
+        pollResults: process.env.pollResults || 5, // <number>: poll results
+        private: process.env.private || false, // keep the test hidden from the test log
+        label: process.env.label || "", // <label>: string label for the test
+        mobile: process.env.mobile || 1,
+        device: process.env.device || "Motorola G (gen 4)",
+        timeout: process.env.timeout || 1000,
+        lighthouse: process.env.lighthouse || true
+      },
+      function(err, result) {
+        if (err) {
+          tools.log.error(
+            `There was an issue while running the webpagetest run ${err}`
+          );
+          reject(err);
+        }
+        if (result) {
+          resolve(result);
+        }
       }
-      if (result) {
-        return result;
-      }
-    }
-  );
-  return results;
+    );
+  });
 }
 
 function convertToMarkdown(result) {
-  let dataAsMarkdown = `
+  const dataAsMarkdown = `
   # WebpageTest report
   * run id: ${result.data.id}
   * URL testid: ${result.data.testUrl}

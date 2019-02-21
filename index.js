@@ -119,9 +119,9 @@ function convertToMarkdown(result) {
   * from run parameter: ${result.data.from}
   * connectivity: ${result.data.connectivity}
   * successFullRuns: ${result.data.successfulFVRuns}
-  ## Report
-  # FilmStrip
-  ## FirstView median
+
+  # Median Run Results
+  ## Filmstrip First View
   ${result.data.median.firstView.videoFrames
     .map((item, index) => {
       if (index === 0) {

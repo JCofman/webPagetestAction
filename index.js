@@ -4,7 +4,10 @@ const tools = new Toolkit();
 const webPageTest = require("webpagetest");
 
 const { event, payload, arguments, sha } = tools.context;
-
+console.log(arguments);
+process.argv.forEach(function(val, index, array) {
+  console.log(index + ": " + val);
+});
 // check pre-requirements
 if (!checkForMissingEnv) tools.exit.failure("Failed!");
 // run the script
@@ -13,7 +16,6 @@ run();
 async function run() {
   try {
     if (event === "push") {
-      console.log(payload);
       console.log(arguments);
       tools.log("Welcome to this example!");
       // 1. An authenticated instance of `@octokit/rest`, a GitHub API SDK

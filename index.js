@@ -2,12 +2,13 @@
 const { Toolkit } = require("actions-toolkit");
 const tools = new Toolkit();
 const webPageTest = require("webpagetest");
+const argv = require("yargs").argv;
 
 const { event, payload, arguments, sha } = tools.context;
 console.log(arguments);
-process.argv.forEach(function(val, index, array) {
-  console.log(index + ": " + val);
-});
+
+console.log(...process.argv);
+console.log(argv);
 // check pre-requirements
 if (!checkForMissingEnv) tools.exit.failure("Failed!");
 // run the script
@@ -83,18 +84,18 @@ async function runWebPagetest(wpt) {
     wpt.runTest(
       process.env.TEST_URL || "https://jcofman.de",
       {
-        location: process.env.location || "Dulles_MotoG4", // <location> string to test from https://www.webpagetest.org/getLocations.php?f=html
-        connectivity: process.env.connectivity || "3GSlow", // <profile> string: connectivity profile -- requires location to be specified -- (Cable|DSL|3GSlow|3G|3GFast|4G|LTE|Edge|2G|Dial|FIOS|Native|custom) [Cable]
-        runs: process.env.runs || 1, // <number>: number of test runs [1]
-        first: process.env.first || false, // skip the Repeat View test
-        video: process.env.video || true, // capture video
-        pollResults: process.env.pollResults || 5, // <number>: poll results
-        private: process.env.private || false, // keep the test hidden from the test log
-        label: process.env.label || "", // <label>: string label for the test
-        mobile: process.env.mobile || 1,
-        device: process.env.device || "Motorola G (gen 4)",
-        timeout: process.env.timeout || 1000,
-        lighthouse: process.env.lighthouse || true
+        location: argv.location || "Dulles_MotoG4", // <location> string to test from https://www.webpagetest.org/getLocations.php?f=html
+        connectivity: argv.connectivity || "3GSlow", // <profile> string: connectivity profile -- requires location to be specified -- (Cable|DSL|3GSlow|3G|3GFast|4G|LTE|Edge|2G|Dial|FIOS|Native|custom) [Cable]
+        runs: argv.runs || 1, // <number>: number of test runs [1]
+        first: argv.first || false, // skip the Repeat View test
+        video: argv.video || true, // capture video
+        pollResults: argv.pollResults || 5, // <number>: poll results
+        private: argv.private || false, // keep the test hidden from the test log
+        label: argv.label || "", // <label>: string label for the test
+        mobile: argv.mobile || 1,
+        device: argv.device || "Motorola G (gen 4)",
+        timeout: argv.timeout || 1000,
+        lighthouse: argv.lighthouse || true
       },
       function(err, result) {
         if (err) {
@@ -219,11 +220,11 @@ function convertToMarkdown(result) {
     result.data.median.repeatView.render
   } | ${result.data.median.repeatView.visualComplete} | ${
     result.data.median.repeatView.SpeedIndex
-  } | ${result.data.median.repeatView.loadTime} |
-    ## Metrics Average Run
-    | View | First Paint | First Contentful Paint | First Meaningful Paint | Time to First Byte | Time to interactive |  Render Started |  Visualy Completed | SpeedIndex | Load Time |
-    |----------|----------|----------|----------|----------|----------|----------|----------|----------|----------|
-    FirstView  | ${result.data.average.firstView.firstPaint} | ${
+  } | ${result.data.median.repeatView.loadTime} |  
+  ## Metrics Average Run
+  | View | First Paint | First Contentful Paint | First Meaningful Paint | Time to First Byte | Time to interactive |  Render Started |  Visualy Completed | SpeedIndex | Load Time |
+  |----------|----------|----------|----------|----------|----------|----------|----------|----------|----------|
+  FirstView  | ${result.data.average.firstView.firstPaint} | ${
     result.data.average.firstView.firstContentfulPaint
   } | ${result.data.average.firstView.firstMeaningfulPaint} | ${
     result.data.average.firstView["lighthouse.Performance.interactive"]
@@ -231,8 +232,8 @@ function convertToMarkdown(result) {
     result.data.average.firstView.render
   } | ${result.data.average.firstView.visualComplete} | ${
     result.data.average.firstView.SpeedIndex
-  } | ${result.data.average.firstView.loadTime} |
-    RepeatView | ${result.data.average.repeatView.firstPaint} | ${
+  } | ${result.data.average.firstView.loadTime} |  
+  RepeatView | ${result.data.average.repeatView.firstPaint} | ${
     result.data.average.repeatView.firstContentfulPaint
   } | ${result.data.average.repeatView.firstMeaningfulPaint} | ${
     result.data.average.repeatView["lighthouse.Performance.interactive"]
@@ -240,7 +241,7 @@ function convertToMarkdown(result) {
     result.data.average.repeatView.render
   } | ${result.data.average.repeatView.visualComplete} | ${
     result.data.average.repeatView.SpeedIndex
-  } | ${result.data.average.repeatView.loadTime} |
+  } | ${result.data.average.repeatView.loadTime} |  
   # Waterfall
   ## FirstView median
   ![alt text](${result.data.median.firstView.images.waterfall})

@@ -61,6 +61,7 @@ async function runWebPagetest(wpt) {
         video: argv.video || true, // capture video
         private: argv.private || false, // keep the test hidden from the test log
         label: argv.label || "Github Action", // <label>: string label for the test
+        timeout: argv.timeout || 10000,
         lighthouse: argv.lighthouse || true,
         ...argv
       },
@@ -82,11 +83,10 @@ async function runWebPagetest(wpt) {
 }
 
 function convertToMarkdown(result) {
-  console.log(result);
   const {
     data: { median }
   } = result;
-  console.log(data);
+
   const dataAsMarkdown = `
   # WebpageTest report
   * run id: ${data.id}

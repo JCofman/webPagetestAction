@@ -4,98 +4,69 @@ const tools = new Toolkit();
 const webPageTest = require("webpagetest");
 const argv = require("yargs").argv;
 
-const { event, payload, arguments, sha } = tools.context;
-console.log(arguments);
+const { event, payload, sha } = tools.context;
 
-console.log(...process.argv);
-console.log(argv);
 // check pre-requirements
 if (!checkForMissingEnv) tools.exit.failure("Failed!");
-// run the script
-run();
 
-async function run() {
+// run the script
+runAudit();
+
+async function runAudit() {
   try {
     if (event === "push") {
-      console.log(arguments);
       tools.log("Welcome to this example!");
+
       // 1. An authenticated instance of `@octokit/rest`, a GitHub API SDK
       const octokit = tools.github;
+
       // initialize webPagetest
       const wpt = new webPageTest(
         "www.webpagetest.org",
         process.env.WEBPAGETEST_API_KEY
       );
+
       // 2. run tests and save results
       const webpagetestResults = await runWebPagetest(wpt);
 
       // 3. convert results to markdown
       const finalResultsAsMarkdown = convertToMarkdown(webpagetestResults);
-      // 4. print results to pull requests
+
+      // 4. print results to as commit comment
       const { owner, repo } = tools.context.repo({ ref: `${payload.ref}` });
 
-      const result = await octokit.repos.createCommitComment({
+      await octokit.repos.createCommitComment({
         owner,
         repo,
         sha,
         body: finalResultsAsMarkdown
       });
+
       tools.exit.success("Succesfully run!");
     }
   } catch (error) {
-    console.log(error);
-  }
-}
-/**
- * Log warnings to the console for missing environment variables
- */
-function checkForMissingEnv() {
-  const requiredEnvVars = [
-    "HOME",
-    "GITHUB_WORKFLOW",
-    "GITHUB_ACTION",
-    "GITHUB_ACTOR",
-    "GITHUB_REPOSITORY",
-    "GITHUB_EVENT_NAME",
-    "GITHUB_EVENT_PATH",
-    "GITHUB_WORKSPACE",
-    "GITHUB_SHA",
-    "GITHUB_REF",
-    "GITHUB_TOKEN",
-    "WEBPAGETEST_API_KEY"
-  ];
-
-  const requiredButMissing = requiredEnvVars.filter(
-    key => !process.env.hasOwnProperty(key)
-  );
-  if (requiredButMissing.length > 0) {
-    // This isn't being run inside of a GitHub Action environment!
-    const list = requiredButMissing.map(key => `- ${key}`).join("\n");
-    const warning = `There are environment variables missing from this runtime.\n${list}`;
-    tools.log.warn(warning);
-    return false;
-  } else {
-    return true;
+    tools.log.error(`Something went wrong ${error}!`);
   }
 }
 
 async function runWebPagetest(wpt) {
   return new Promise((resolve, reject) => {
     wpt.runTest(
-      process.env.TEST_URL || "https://jcofman.de",
+      process.env.TEST_URL,
       {
         location: argv.location || "Dulles_MotoG4", // <location> string to test from https://www.webpagetest.org/getLocations.php?f=html
         connectivity: argv.connectivity || "3GSlow", // <profile> string: connectivity profile -- requires location to be specified -- (Cable|DSL|3GSlow|3G|3GFast|4G|LTE|Edge|2G|Dial|FIOS|Native|custom) [Cable]
-        runs: argv.runs || 1, // <number>: number of test runs [1]
+        runs: argv.runs || 5, // <number>: number of test runs [1]
         first: argv.first || false, // skip the Repeat View test
         video: argv.video || true, // capture video
         pollResults: argv.pollResults || 5, // <number>: poll results
         private: argv.private || false, // keep the test hidden from the test log
-        label: argv.label || "", // <label>: string label for the test
+        label: argv.label || "Github Action", // <label>: string label for the test
         mobile: argv.mobile || 1,
         device: argv.device || "Motorola G (gen 4)",
         timeout: argv.timeout || 1000,
-        lighthouse: argv.lighthouse || true
+        lighthouse: argv.lighthouse || true,
+        ...argv
       },
       function(err, result) {
         if (err) {
@@ -256,6 +227,10 @@ function convertToMarkdown(result) {
   return dataAsMarkdown;
 }
 
+/**
+ * prints file size in a human readable format
+ * @param {number} size
+ */
 function humanFileSize(size) {
   var i = Math.floor(Math.log(size) / Math.log(1024));
   return (
@@ -263,4 +238,38 @@ function humanFileSize(size) {
     " " +
     ["B", "kB", "MB", "GB", "TB"][i]
   );
+}
+
+/**
+ * Log warnings to the console for missing environment variables
+ */
+function checkForMissingEnv() {
+  const requiredEnvVars = [
+    "HOME",
+    "GITHUB_WORKFLOW",
+    "GITHUB_ACTION",
+    "GITHUB_ACTOR",
+    "GITHUB_REPOSITORY",
+    "GITHUB_EVENT_NAME",
+    "GITHUB_EVENT_PATH",
+    "GITHUB_WORKSPACE",
+    "GITHUB_SHA",
+    "GITHUB_REF",
+    "GITHUB_TOKEN",
+    "WEBPAGETEST_API_KEY",
+    "TEST_URL"
+  ];
+
+  const requiredButMissing = requiredEnvVars.filter(
+    key => !process.env.hasOwnProperty(key)
+  );
+  if (requiredButMissing.length > 0) {
+    // This isn't being run inside of a GitHub Action environment!
+    const list = requiredButMissing.map(key => `- ${key}`).join("\n");
+    const warning = `There are environment variables missing from this runtime.\n${list}`;
+    tools.log.warn(warning);
+    return false;
+  } else {
+    return true;
+  }
 }

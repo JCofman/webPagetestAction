@@ -18,7 +18,6 @@ async function runAudit() {
       tools.log("Welcome to this example!");
       console.log(process.env.TEST_URL);
       console.log(argv);
-      console.log(argv.)
       // 1. An authenticated instance of `@octokit/rest`, a GitHub API SDK
       const octokit = tools.github;
 

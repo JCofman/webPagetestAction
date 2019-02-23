@@ -16,7 +16,9 @@ async function runAudit() {
   try {
     if (event === "push") {
       tools.log("Welcome to this example!");
-
+      console.log(process.env.TEST_URL);
+      console.log(argv);
+      console.log(argv.)
       // 1. An authenticated instance of `@octokit/rest`, a GitHub API SDK
       const octokit = tools.github;
 
@@ -56,7 +58,7 @@ async function runWebPagetest(wpt) {
       {
         location: argv.location || "Dulles_MotoG4", // <location> string to test from https://www.webpagetest.org/getLocations.php?f=html
         connectivity: argv.connectivity || "3GSlow", // <profile> string: connectivity profile -- requires location to be specified -- (Cable|DSL|3GSlow|3G|3GFast|4G|LTE|Edge|2G|Dial|FIOS|Native|custom) [Cable]
-        runs: argv.runs || 5, // <number>: number of test runs [1]
+        runs: argv.runs || 1, // <number>: number of test runs [1]
         first: argv.first || false, // skip the Repeat View test
         video: argv.video || true, // capture video
         pollResults: argv.pollResults || 5, // <number>: poll results

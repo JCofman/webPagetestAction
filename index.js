@@ -86,6 +86,7 @@ async function runWebPagetest(wpt) {
 }
 
 function convertToMarkdown(result) {
+  console.log(result.data.testUrl);
   const {
     data: { median }
   } = result;

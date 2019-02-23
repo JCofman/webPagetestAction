@@ -87,9 +87,7 @@ async function runWebPagetest(wpt) {
 
 function convertToMarkdown(result) {
   console.log(result.data.testUrl);
-  const {
-    data: { median }
-  } = result;
+  const { data } = result;
   console.log(data.testUrl);
   const dataAsMarkdown = `
   # WebpageTest report
@@ -103,7 +101,7 @@ function convertToMarkdown(result) {
 
   # Median Run Results
   ## Filmstrip First View
-  ${median.firstView.videoFrames
+  ${data.median.firstView.videoFrames
     .map((item, index) => {
       if (index === 0) {
         return `| ${item.time} milliseconds |`;
@@ -112,7 +110,7 @@ function convertToMarkdown(result) {
       }
     })
     .join("")}
-  ${median.firstView.videoFrames
+  ${data.median.firstView.videoFrames
     .map((item, index) => {
       if (index === 0) {
         return `|--------------|`;
@@ -121,7 +119,7 @@ function convertToMarkdown(result) {
       }
     })
     .join("")}
-  ${median.firstView.videoFrames
+  ${data.median.firstView.videoFrames
     .map((item, index) => {
       if (index === 0) {
         return `| ![alt text](${item.image}) |`;
@@ -130,7 +128,7 @@ function convertToMarkdown(result) {
       }
     })
     .join("")}
-  ${median.firstView.videoFrames
+  ${data.median.firstView.videoFrames
     .map((item, index) => {
       if (index === 0) {
         return `| ${item.VisuallyComplete} |`;
@@ -141,7 +139,7 @@ function convertToMarkdown(result) {
     .join("")}
   
   ## Filmstrip Repeat View 
-  ${median.repeatView.videoFrames
+  ${data.median.repeatView.videoFrames
     .map((item, index) => {
       if (index === 0) {
         return `| ${item.time} milliseconds |`;
@@ -150,7 +148,7 @@ function convertToMarkdown(result) {
       }
     })
     .join("")}
-  ${median.repeatView.videoFrames
+  ${data.median.repeatView.videoFrames
     .map((item, index) => {
       if (index === 0) {
         return `|--------------|`;
@@ -159,7 +157,7 @@ function convertToMarkdown(result) {
       }
     })
     .join("")}
-  ${median.repeatView.videoFrames
+  ${data.median.repeatView.videoFrames
     .map((item, index) => {
       if (index === 0) {
         return `| ![alt text](${item.image}) |`;
@@ -168,7 +166,7 @@ function convertToMarkdown(result) {
       }
     })
     .join("")}
-  ${median.repeatView.videoFrames
+  ${data.median.repeatView.videoFrames
     .map((item, index) => {
       if (index === 0) {
         return `| ${item.VisuallyComplete} |`;
@@ -180,38 +178,40 @@ function convertToMarkdown(result) {
     ## Median Metrics
     | View | First Paint | First Contentful Paint | First Meaningful Paint | Time to First Byte | Time to interactive |  Render Started |  Visualy Completed | SpeedIndex | Load Time |
     |----------|----------|----------|----------|----------|----------|----------|----------|----------|----------|
-    FirstView  | ${median.firstView.firstPaint} | ${
-    median.firstView.firstContentfulPaint
-  } | ${median.firstView.firstMeaningfulPaint} | ${
-    median.firstView["lighthouse.Performance.interactive"]
-  } | ${median.firstView.TTFB} | ${median.firstView.render} | ${
-    median.firstView.visualComplete
-  } | ${median.firstView.SpeedIndex} | ${median.firstView.loadTime} |
-    RepeatView | ${median.repeatView.firstPaint} | ${
-    median.repeatView.firstContentfulPaint
-  } | ${median.repeatView.firstMeaningfulPaint} | ${
-    median.repeatView["lighthouse.Performance.interactive"]
-  } | ${median.repeatView.TTFB} | ${median.repeatView.render} | ${
-    median.repeatView.visualComplete
-  } | ${median.repeatView.SpeedIndex} | ${median.repeatView.loadTime} |  
+    FirstView  | ${data.median.firstView.firstPaint} | ${
+    data.median.firstView.firstContentfulPaint
+  } | ${data.median.firstView.firstMeaningfulPaint} | ${
+    data.median.firstView["lighthouse.Performance.interactive"]
+  } | ${data.median.firstView.TTFB} | ${data.median.firstView.render} | ${
+    data.median.firstView.visualComplete
+  } | ${data.median.firstView.SpeedIndex} | ${data.median.firstView.loadTime} |
+    RepeatView | ${data.median.repeatView.firstPaint} | ${
+    data.median.repeatView.firstContentfulPaint
+  } | ${data.median.repeatView.firstMeaningfulPaint} | ${
+    data.median.repeatView["lighthouse.Performance.interactive"]
+  } | ${data.median.repeatView.TTFB} | ${data.median.repeatView.render} | ${
+    data.median.repeatView.visualComplete
+  } | ${data.median.repeatView.SpeedIndex} | ${
+    data.median.repeatView.loadTime
+  } |  
   
   ## Median Waterfall
   ### FirstView
-  ![alt text](${median.firstView.images.waterfall})
+  ![alt text](${data.median.firstView.images.waterfall})
   ### RepeatView
-  ![alt text](${median.repeatView.images.waterfall})
+  ![alt text](${data.median.repeatView.images.waterfall})
 
   ## Median Requests 
   ### FirstView
   | File | FileSize |
   |----------|----------|
-   ${median.firstView.requests
+   ${data.median.firstView.requests
      .map(request => `${request.url}|${humanFileSize(request.bytesIn)} \r\n`)
      .join("")}
   ### RepeatView
   | File | FileSize |
   |----------|----------|
-   ${median.repeatView.requests
+   ${data.median.repeatView.requests
      .map(request => `${request.url}|${humanFileSize(request.bytesIn)} \r\n`)
      .join("")}
       `;

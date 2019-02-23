@@ -59,8 +59,11 @@ async function runWebPagetest(wpt) {
         runs: argv.runs || 3, // <number>: number of test runs [1]
         first: argv.first || false, // skip the Repeat View test
         video: argv.video || true, // capture video
-        private: argv.private || false, // keep the test hidden from the test log
+        pollResults: argv.pollResults || 5, // <number>: poll results
+        private: argv.private || true, // keep the test hidden from the test log
         label: argv.label || "Github Action", // <label>: string label for the test
+        mobile: argv.mobile || 1,
+        device: argv.device || "Motorola G (gen 4)",
         timeout: argv.timeout || 10000,
         lighthouse: argv.lighthouse || true,
         ...argv
@@ -83,6 +86,8 @@ async function runWebPagetest(wpt) {
 }
 
 function convertToMarkdown(result) {
+  console.log(result);
+  console.log(result.data);
   const {
     data: { median }
   } = result;

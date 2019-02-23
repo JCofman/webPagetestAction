@@ -82,9 +82,11 @@ async function runWebPagetest(wpt) {
 }
 
 function convertToMarkdown(result) {
+  console.log(result);
   const {
-    data: { median, average }
+    data: { median }
   } = result;
+  console.log(data);
   const dataAsMarkdown = `
   # WebpageTest report
   * run id: ${data.id}

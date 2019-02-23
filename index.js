@@ -71,7 +71,9 @@ async function runWebPagetest(wpt) {
       function(err, result) {
         if (err) {
           tools.log.error(
-            `There was an issue while running the webpagetest run ${err}`
+            `There was an issue while running the webpagetest run ${JSON.stringify(
+              err
+            )}`
           );
           reject(err);
         }

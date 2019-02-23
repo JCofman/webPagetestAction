@@ -16,8 +16,7 @@ async function runAudit() {
   try {
     if (event === "push") {
       tools.log("Welcome to this example!");
-      console.log(process.env.TEST_URL);
-      console.log(argv);
+
       // 1. An authenticated instance of `@octokit/rest`, a GitHub API SDK
       const octokit = tools.github;
 
@@ -57,15 +56,11 @@ async function runWebPagetest(wpt) {
       {
         location: argv.location || "Dulles_MotoG4", // <location> string to test from https://www.webpagetest.org/getLocations.php?f=html
         connectivity: argv.connectivity || "3GSlow", // <profile> string: connectivity profile -- requires location to be specified -- (Cable|DSL|3GSlow|3G|3GFast|4G|LTE|Edge|2G|Dial|FIOS|Native|custom) [Cable]
-        runs: argv.runs || 1, // <number>: number of test runs [1]
+        runs: argv.runs || 3, // <number>: number of test runs [1]
         first: argv.first || false, // skip the Repeat View test
         video: argv.video || true, // capture video
-        pollResults: argv.pollResults || 5, // <number>: poll results
         private: argv.private || false, // keep the test hidden from the test log
         label: argv.label || "Github Action", // <label>: string label for the test
-        mobile: argv.mobile || 1,
-        device: argv.device || "Motorola G (gen 4)",
-        timeout: argv.timeout || 1000,
         lighthouse: argv.lighthouse || true,
         ...argv
       },
@@ -87,19 +82,22 @@ async function runWebPagetest(wpt) {
 }
 
 function convertToMarkdown(result) {
+  const {
+    data: { median, average }
+  } = result;
   const dataAsMarkdown = `
   # WebpageTest report
-  * run id: ${result.data.id}
-  * URL testid: ${result.data.testUrl}
-  * Summary of the test: ${result.data.summary}
-  * location where the test has run: ${result.data.location}
-  * from run parameter: ${result.data.from}
-  * connectivity: ${result.data.connectivity}
-  * successFullRuns: ${result.data.successfulFVRuns}
+  * run id: ${data.id}
+  * URL testid: ${data.testUrl}
+  * Summary of the test: ${data.summary}
+  * location where the test has run: ${data.location}
+  * from run parameter: ${data.from}
+  * connectivity: ${data.connectivity}
+  * successFullRuns: ${data.successfulFVRuns}
 
   # Median Run Results
   ## Filmstrip First View
-  ${result.data.median.firstView.videoFrames
+  ${median.firstView.videoFrames
     .map((item, index) => {
       if (index === 0) {
         return `| ${item.time} milliseconds |`;
@@ -108,7 +106,7 @@ function convertToMarkdown(result) {
       }
     })
     .join("")}
-  ${result.data.median.firstView.videoFrames
+  ${median.firstView.videoFrames
     .map((item, index) => {
       if (index === 0) {
         return `|--------------|`;
@@ -117,7 +115,7 @@ function convertToMarkdown(result) {
       }
     })
     .join("")}
-  ${result.data.median.firstView.videoFrames
+  ${median.firstView.videoFrames
     .map((item, index) => {
       if (index === 0) {
         return `| ![alt text](${item.image}) |`;
@@ -126,7 +124,7 @@ function convertToMarkdown(result) {
       }
     })
     .join("")}
-  ${result.data.median.firstView.videoFrames
+  ${median.firstView.videoFrames
     .map((item, index) => {
       if (index === 0) {
         return `| ${item.VisuallyComplete} |`;
@@ -136,8 +134,8 @@ function convertToMarkdown(result) {
     })
     .join("")}
   
-  ## ReapeatView median
-  ${result.data.median.repeatView.videoFrames
+  ## Filmstrip Repeat View 
+  ${median.repeatView.videoFrames
     .map((item, index) => {
       if (index === 0) {
         return `| ${item.time} milliseconds |`;
@@ -146,7 +144,7 @@ function convertToMarkdown(result) {
       }
     })
     .join("")}
-  ${result.data.median.repeatView.videoFrames
+  ${median.repeatView.videoFrames
     .map((item, index) => {
       if (index === 0) {
         return `|--------------|`;
@@ -155,7 +153,7 @@ function convertToMarkdown(result) {
       }
     })
     .join("")}
-  ${result.data.median.repeatView.videoFrames
+  ${median.repeatView.videoFrames
     .map((item, index) => {
       if (index === 0) {
         return `| ![alt text](${item.image}) |`;
@@ -164,7 +162,7 @@ function convertToMarkdown(result) {
       }
     })
     .join("")}
-  ${result.data.median.repeatView.videoFrames
+  ${median.repeatView.videoFrames
     .map((item, index) => {
       if (index === 0) {
         return `| ${item.VisuallyComplete} |`;
@@ -173,57 +171,41 @@ function convertToMarkdown(result) {
       }
     })
     .join("")}
-  # VisualMetrics
-  ## Metrics Median Run
-  | View | First Paint | First Contentful Paint | First Meaningful Paint | Time to First Byte | Time to interactive |  Render Started |  Visualy Completed | SpeedIndex | Load Time |
-  |----------|----------|----------|----------|----------|----------|----------|----------|----------|----------|
-  FirstView  | ${result.data.median.firstView.firstPaint} | ${
-    result.data.median.firstView.firstContentfulPaint
-  } | ${result.data.median.firstView.firstMeaningfulPaint} | ${
-    result.data.median.firstView["lighthouse.Performance.interactive"]
-  } | ${result.data.median.firstView.TTFB} | ${
-    result.data.median.firstView.render
-  } | ${result.data.median.firstView.visualComplete} | ${
-    result.data.median.firstView.SpeedIndex
-  } | ${result.data.median.firstView.loadTime} |
-  RepeatView | ${result.data.median.repeatView.firstPaint} | ${
-    result.data.median.repeatView.firstContentfulPaint
-  } | ${result.data.median.repeatView.firstMeaningfulPaint} | ${
-    result.data.median.repeatView["lighthouse.Performance.interactive"]
-  } | ${result.data.median.repeatView.TTFB} | ${
-    result.data.median.repeatView.render
-  } | ${result.data.median.repeatView.visualComplete} | ${
-    result.data.median.repeatView.SpeedIndex
-  } | ${result.data.median.repeatView.loadTime} |  
-  ## Metrics Average Run
-  | View | First Paint | First Contentful Paint | First Meaningful Paint | Time to First Byte | Time to interactive |  Render Started |  Visualy Completed | SpeedIndex | Load Time |
-  |----------|----------|----------|----------|----------|----------|----------|----------|----------|----------|
-  FirstView  | ${result.data.average.firstView.firstPaint} | ${
-    result.data.average.firstView.firstContentfulPaint
-  } | ${result.data.average.firstView.firstMeaningfulPaint} | ${
-    result.data.average.firstView["lighthouse.Performance.interactive"]
-  } | ${result.data.average.firstView.TTFB} | ${
-    result.data.average.firstView.render
-  } | ${result.data.average.firstView.visualComplete} | ${
-    result.data.average.firstView.SpeedIndex
-  } | ${result.data.average.firstView.loadTime} |  
-  RepeatView | ${result.data.average.repeatView.firstPaint} | ${
-    result.data.average.repeatView.firstContentfulPaint
-  } | ${result.data.average.repeatView.firstMeaningfulPaint} | ${
-    result.data.average.repeatView["lighthouse.Performance.interactive"]
-  } | ${result.data.average.repeatView.TTFB} | ${
-    result.data.average.repeatView.render
-  } | ${result.data.average.repeatView.visualComplete} | ${
-    result.data.average.repeatView.SpeedIndex
-  } | ${result.data.average.repeatView.loadTime} |  
-  # Waterfall
-  ## FirstView median
-  ![alt text](${result.data.median.firstView.images.waterfall})
-  # Files
-  ## FirstView median Files
+    ## Median Metrics
+    | View | First Paint | First Contentful Paint | First Meaningful Paint | Time to First Byte | Time to interactive |  Render Started |  Visualy Completed | SpeedIndex | Load Time |
+    |----------|----------|----------|----------|----------|----------|----------|----------|----------|----------|
+    FirstView  | ${median.firstView.firstPaint} | ${
+    median.firstView.firstContentfulPaint
+  } | ${median.firstView.firstMeaningfulPaint} | ${
+    median.firstView["lighthouse.Performance.interactive"]
+  } | ${median.firstView.TTFB} | ${median.firstView.render} | ${
+    median.firstView.visualComplete
+  } | ${median.firstView.SpeedIndex} | ${median.firstView.loadTime} |
+    RepeatView | ${median.repeatView.firstPaint} | ${
+    median.repeatView.firstContentfulPaint
+  } | ${median.repeatView.firstMeaningfulPaint} | ${
+    median.repeatView["lighthouse.Performance.interactive"]
+  } | ${median.repeatView.TTFB} | ${median.repeatView.render} | ${
+    median.repeatView.visualComplete
+  } | ${median.repeatView.SpeedIndex} | ${median.repeatView.loadTime} |  
+  
+  ## Median Waterfall
+  ### FirstView
+  ![alt text](${median.firstView.images.waterfall})
+  ### RepeatView
+  ![alt text](${median.repeatView.images.waterfall})
+
+  ## Median Requests 
+  ### FirstView
   | File | FileSize |
   |----------|----------|
-   ${result.data.median.firstView.requests
+   ${median.firstView.requests
+     .map(request => `${request.url}|${humanFileSize(request.bytesIn)} \r\n`)
+     .join("")}
+  ### RepeatView
+  | File | FileSize |
+  |----------|----------|
+   ${median.repeatView.requests
      .map(request => `${request.url}|${humanFileSize(request.bytesIn)} \r\n`)
      .join("")}
       `;

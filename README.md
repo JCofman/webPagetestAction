@@ -1,12 +1,14 @@
 # WebPageTest GitHub Action
 
 ⚡️🚀 GitHub Action to print [webPageTest.org](https://www.webpagetest.org/) results as a commit comment after a push.
-
+<details>
+  <summary> Click to see example commit comment </summary>
 <p align="center">
   <img alt="example image" src="https://github.com/JCofman/webPagetestAction/blob/master/example.png"/>
 </p>
+</details>
 
-Make sure to pass a WebPageTest API key which you can get [here](https://www.webpagetest.org/getkey.php)
+Make sure to pass a WEBPAGETEST_API_KEY which you can get [here](https://www.webpagetest.org/getkey.php) and a TEST_URL.
 
 ## Secrets
 
@@ -15,7 +17,7 @@ Make sure to pass a WebPageTest API key which you can get [here](https://www.web
 
 ## Environment Variables
 
-- WEBPAGETEST_SERVER_URL - By default this repo uses the awesome free WebPageTest `www.webpagetest.org` server offered by Akami but you can provide your own hosted version.
+- WEBPAGETEST_SERVER_URL - Optional By default this repo uses the awesome free WebPageTest `www.webpagetest.org` server offered by Akami but you can provide your own hosted version.
 - TEST_URL - URL to run the audit e.g. `https://jcofman.de`
 
 ## Args

@@ -174,16 +174,18 @@ function convertToMarkdown(result) {
     })
     .join("")}
     ## Median Metrics
-    | View | First Paint | First Contentful Paint | First Meaningful Paint | Time to First Byte | Time to interactive |  Render Started |  Visualy Completed | SpeedIndex | Load Time |
-    |----------|----------|----------|----------|----------|----------|----------|----------|----------|----------|
-    FirstView  | ${data.median.firstView.firstPaint} | ${
+| View | First Paint | First Contentful Paint | First Meaningful Paint | Time to First Byte | Time to interactive |  Render Started |  Visualy Completed | SpeedIndex | Load Time |
+|----------|----------|----------|----------|----------|----------|----------|----------|----------|----------|
+FirstView  | ${data.median.firstView.firstPaint} | ${
     data.median.firstView.firstContentfulPaint
   } | ${data.median.firstView.firstMeaningfulPaint} | ${
     data.median.firstView["lighthouse.Performance.interactive"]
   } | ${data.median.firstView.TTFB} | ${data.median.firstView.render} | ${
     data.median.firstView.visualComplete
-  } | ${data.median.firstView.SpeedIndex} | ${data.median.firstView.loadTime} |
-    RepeatView | ${data.median.repeatView.firstPaint} | ${
+  } | ${data.median.firstView.SpeedIndex} | ${
+    data.median.firstView.loadTime
+  } |  
+RepeatView | ${data.median.repeatView.firstPaint} | ${
     data.median.repeatView.firstContentfulPaint
   } | ${data.median.repeatView.firstMeaningfulPaint} | ${
     data.median.repeatView["lighthouse.Performance.interactive"]
@@ -192,7 +194,6 @@ function convertToMarkdown(result) {
   } | ${data.median.repeatView.SpeedIndex} | ${
     data.median.repeatView.loadTime
   } |  
-  
   ## Median Waterfall
   ### FirstView
   ![alt text](${data.median.firstView.images.waterfall})

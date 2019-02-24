@@ -9,7 +9,6 @@ action "WebPageTestActions" {
     "GITHUB_TOKEN",
     "WEBPAGETEST_API_KEY",
   ]
-  args = ["--location=Dulles_GalaxyS7"]
   env = {
     TEST_URL = "https://jcofman.de"
   }

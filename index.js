@@ -15,7 +15,7 @@ runAudit();
 async function runAudit() {
   try {
     if (event === "push") {
-      tools.log("Welcome to this example!");
+      tools.log("### Action triggered! ###");
 
       // 1. An authenticated instance of `@octokit/rest`, a GitHub API SDK
       const octokit = tools.github;
@@ -56,7 +56,7 @@ async function runWebPagetest(wpt) {
       {
         location: argv.location || "Dulles_MotoG4", // <location> string to test from https://www.webpagetest.org/getLocations.php?f=html
         connectivity: argv.connectivity || "3GSlow", // <profile> string: connectivity profile -- requires location to be specified -- (Cable|DSL|3GSlow|3G|3GFast|4G|LTE|Edge|2G|Dial|FIOS|Native|custom) [Cable]
-        runs: argv.runs || 1, // <number>: number of test runs [1]
+        runs: argv.runs || 3, // <number>: number of test runs [1]
         first: argv.first || false, // skip the Repeat View test
         video: argv.video || true, // capture video
         pollResults: argv.pollResults || 5, // <number>: poll results
@@ -71,7 +71,7 @@ async function runWebPagetest(wpt) {
       function(err, result) {
         if (err) {
           tools.log.error(
-            `There was an issue while running the webpagetest run ${JSON.stringify(
+            `There was an issue while running the WebPageTest run ${JSON.stringify(
               err
             )}`
           );
@@ -86,11 +86,9 @@ async function runWebPagetest(wpt) {
 }
 
 function convertToMarkdown(result) {
-  console.log(result.data.testUrl);
   const { data } = result;
-  console.log(data.testUrl);
   const dataAsMarkdown = `
-  # WebpageTest report
+  # WebPageTest report
   * run id: ${data.id}
   * URL testid: ${data.testUrl}
   * Summary of the test: ${data.summary}

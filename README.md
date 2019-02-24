@@ -34,14 +34,34 @@ workflow "Run Webpagetest" {
 }
 
 action "WebPageTestActions" {
-  uses = "./"
   secrets = [
     "GITHUB_TOKEN",
     "WEBPAGETEST_API_KEY",
   ]
   env = {
     TEST_URL = ""
-    WEBPAGETEST_SERVER_URL= "www.webpagetest.org"
+  }
+}
+
+```
+
+With self hosted WebPagetest server
+
+```hcl
+
+workflow "Run Webpagetest" {
+  on = "push"
+  resolves = ["WebPageTestActions"]
+}
+
+action "WebPageTestActions" {
+  secrets = [
+    "GITHUB_TOKEN",
+    "WEBPAGETEST_API_KEY",
+  ]
+  env = {
+    TEST_URL = ""
+    WEBPAGETEST_SERVER_URL= "www.your-custom-server.org"
   }
 }
 

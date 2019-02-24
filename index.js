@@ -22,7 +22,7 @@ async function runAudit() {
 
       // initialize webPagetest
       const wpt = new webPageTest(
-        "www.webpagetest.org",
+        process.env.WEBPAGETEST_SERVER_URL || "www.webpagetest.org",
         process.env.WEBPAGETEST_API_KEY
       );
 
@@ -173,7 +173,7 @@ function convertToMarkdown(result) {
       }
     })
     .join("")}
-    ## Median Metrics
+## Median Metrics
 | View | First Paint | First Contentful Paint | First Meaningful Paint | Time to First Byte | Time to interactive |  Render Started |  Visualy Completed | SpeedIndex | Load Time |
 |----------|----------|----------|----------|----------|----------|----------|----------|----------|----------|
 FirstView  | ${data.median.firstView.firstPaint} | ${

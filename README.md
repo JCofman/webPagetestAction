@@ -1,12 +1,15 @@
 # WebPageTest GitHub Action
 
 ⚡️🚀 GitHub Action to print [webPageTest.org](https://www.webpagetest.org/) results as a commit comment after a push.
+
+<p></p>
 <details>
   <summary> Click to see example commit comment </summary>
 <p align="center">
   <img alt="example image" src="https://github.com/JCofman/webPagetestAction/blob/master/example.png"/>
 </p>
 </details>
+<p></p>
 
 Make sure to pass a WEBPAGETEST_API_KEY which you can get [here](https://www.webpagetest.org/getkey.php) and a TEST_URL.
 

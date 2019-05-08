@@ -29,7 +29,6 @@ You should be able to provide custom args as mentioned in the https://github.com
 
 ## Examples
 
-Trigger a build to a specific site in Netlify
 
 ```hcl
 
@@ -44,7 +43,7 @@ action "WebPageTestActions" {
     "WEBPAGETEST_API_KEY",
   ]
   env = {
-    TEST_URL = ""
+    TEST_URL = "http://your-site-to-test.com"
   }
 }
 
@@ -65,7 +64,7 @@ action "WebPageTestActions" {
     "WEBPAGETEST_API_KEY",
   ]
   env = {
-    TEST_URL = ""
+    TEST_URL = "http://your-site-to-test.com"
     WEBPAGETEST_SERVER_URL= "www.your-custom-server.org"
   }
 }

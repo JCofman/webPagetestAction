@@ -31,43 +31,39 @@ You should be able to provide custom args as mentioned in the https://github.com
 
 Trigger a build to a specific site in Netlify
 
-```hcl
-
-workflow "Run Webpagetest" {
-  on = "push"
-  resolves = ["WebPageTestActions"]
-}
-
-action "WebPageTestActions" {
-  secrets = [
-    "GITHUB_TOKEN",
-    "WEBPAGETEST_API_KEY",
-  ]
-  env = {
-    TEST_URL = ""
-  }
-}
-
+```yml
+on: push
+name: Run Webpagetest
+jobs:
+  webPageTestActions:
+    name: WebPageTestActions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: WebPageTestActions
+        uses: ./
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TEST_URL: https://jcofman.de
+          WEBPAGETEST_API_KEY: ${{ secrets.WEBPAGETEST_API_KEY }}
 ```
 
 With self hosted WebPagetest server
 
-```hcl
-
-workflow "Run Webpagetest" {
-  on = "push"
-  resolves = ["WebPageTestActions"]
-}
-
-action "WebPageTestActions" {
-  secrets = [
-    "GITHUB_TOKEN",
-    "WEBPAGETEST_API_KEY",
-  ]
-  env = {
-    TEST_URL = ""
-    WEBPAGETEST_SERVER_URL= "www.your-custom-server.org"
-  }
-}
-
+```yml
+on: push
+name: Run Webpagetest
+jobs:
+  webPageTestActions:
+    name: WebPageTestActions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: WebPageTestActions
+        uses: ./
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TEST_URL: https://jcofman.de
+          WEBPAGETEST_API_KEY: ${{ secrets.WEBPAGETEST_API_KEY }}
+          WEBPAGETEST_SERVER_URL: yourWebpagetestServer.com
 ```

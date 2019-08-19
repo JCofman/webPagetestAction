@@ -1,0 +1,14 @@
+on: push
+name: Run Webpagetest
+jobs:
+  webPageTestActions:
+    name: WebPageTestActions
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: WebPageTestActions
+      uses: ./
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TEST_URL: https://jcofman.de
+        WEBPAGETEST_API_KEY: ${{ secrets.WEBPAGETEST_API_KEY }}

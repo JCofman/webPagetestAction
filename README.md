@@ -29,8 +29,6 @@ You should be able to provide custom args as mentioned in the https://github.com
 
 ## Examples
 
-Trigger a build to a specific site in Netlify
-
 ```yml
 on: push
 name: Run Webpagetest
@@ -65,5 +63,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TEST_URL: https://jcofman.de
           WEBPAGETEST_API_KEY: ${{ secrets.WEBPAGETEST_API_KEY }}
-          WEBPAGETEST_SERVER_URL: yourWebpagetestServer.com
+          WEBPAGETEST_SERVER_URL: www.your-custom-server.org
 ```

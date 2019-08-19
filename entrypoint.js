@@ -33,7 +33,10 @@ async function runAudit() {
       const finalResultsAsMarkdown = convertToMarkdown(webpagetestResults);
 
       // 4. print results to as commit comment
-      const { owner, repo } = tools.context.repo({ ref: `${payload.ref}` });
+      const { owner, repo } = {
+        ...tools.context.repo,
+        ref: `${payload.ref}`
+      };
 
       await octokit.repos.createCommitComment({
         owner,

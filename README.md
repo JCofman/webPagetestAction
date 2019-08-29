@@ -37,12 +37,10 @@ jobs:
     name: WebPageTestActions
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - name: WebPageTestActions
-        uses: ./
+      - uses: JCofman/webPagetestAction@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TEST_URL: https://jcofman.de
+          TEST_URL: https://example.com
           WEBPAGETEST_API_KEY: ${{ secrets.WEBPAGETEST_API_KEY }}
 ```
 
@@ -56,12 +54,10 @@ jobs:
     name: WebPageTestActions
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - name: WebPageTestActions
-        uses: ./
+      - uses: JCofman/webPagetestAction@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TEST_URL: https://jcofman.de
+          TEST_URL: https://example.com
           WEBPAGETEST_API_KEY: ${{ secrets.WEBPAGETEST_API_KEY }}
           WEBPAGETEST_SERVER_URL: www.your-custom-server.org
 ```

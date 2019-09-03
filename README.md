@@ -25,7 +25,7 @@ Make sure to pass a WEBPAGETEST_API_KEY which you can get [here](https://www.web
 
 ## Args
 
-You should be able to provide custom args as mentioned in the https://github.com/marcelduran/webpagetest-api under the `Test (works for test command only)` section.
+You should be able to provide custom args as mentioned in the [marcelduran/webpagetest-api](https://github.com/marcelduran/webpagetest-api#test-works-for-test-command-only) under the `Test (works for test command only)` section.
 
 ## Examples
 

@@ -1,0 +1,23 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "staabm",
+      "name": "Markus Staab",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/120441?v=4",
+      "profile": "https://twitter.com/markusstaab",
+      "contributions": [
+        "doc"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "webPagetestAction",
+  "projectOwner": "JCofman",
+  "repoType": "github",
+  "repoHost": "https://github.com"
+}

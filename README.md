@@ -1,4 +1,5 @@
 # WebPageTest GitHub Action
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 
 ⚡️🚀 GitHub Action to print [webPageTest.org](https://www.webpagetest.org/) results as a commit comment after a push.
 
@@ -61,3 +62,19 @@ jobs:
           WEBPAGETEST_API_KEY: ${{ secrets.WEBPAGETEST_API_KEY }}
           WEBPAGETEST_SERVER_URL: www.your-custom-server.org
 ```
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+<table>
+  <tr>
+    <td align="center"><a href="https://twitter.com/markusstaab"><img src="https://avatars2.githubusercontent.com/u/120441?v=4" width="100px;" alt="Markus Staab"/><br /><sub><b>Markus Staab</b></sub></a><br /><a href="https://github.com/JCofman/webPagetestAction/commits?author=staabm" title="Documentation">📖</a></td>
+  </tr>
+</table>
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

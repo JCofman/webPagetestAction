@@ -63,6 +63,44 @@ jobs:
           WEBPAGETEST_SERVER_URL: www.your-custom-server.org
 ```
 
+
+When you use the default action without any custom arguments some defaults will be set:
+
+```js
+        location: "Dulles_MotoG4", // <location> string to test from https://www.webpagetest.org/getLocations.php?f=html
+        connectivity:  "3GSlow", // <profile> string: connectivity profile -- requires location to be specified -- (Cable|DSL|3GSlow|3G|3GFast|4G|LTE|Edge|2G|Dial|FIOS|Native|custom) [Cable]
+        runs: 3, // <number>: number of test runs [1]
+        first: false, // skip the Repeat View test
+        video: true, // capture video
+        pollResults: 5, // <number>: poll results
+        private: true, // keep the test hidden from the test log
+        label: "Github Action", // <label>: string label for the test
+        mobile: 1,
+        device: "Motorola G (gen 4)",
+        timeout: 10000,
+        lighthouse: true,
+```
+
+You can provide your own custom args like the `location` and `connectivity` ⚠️ keep in mind that some devices locations and arguments don't work together ⚠️. You can find more details [here](https://github.com/marcelduran/webpagetest-api#test-works-for-test-command-only)
+
+```yml
+on: push
+name: Run Webpagetest
+jobs:
+  webPageTestActions:
+    name: WebPageTestActions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: JCofman/webPagetestAction@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TEST_URL: https://example.com
+          WEBPAGETEST_API_KEY: ${{ secrets.WEBPAGETEST_API_KEY }}
+          WEBPAGETEST_SERVER_URL: www.your-custom-server.org
+         with:
+          args: location="Dulles_Nexus5" connectivity="DSL"
+```
+
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):

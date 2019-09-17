@@ -13,6 +13,17 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "JCofman",
+      "name": "Jacob Cofman",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2118956?v=4",
+      "profile": "https://jcofman.de",
+      "contributions": [
+        "doc",
+        "code",
+        "example"
+      ]
     }
   ],
   "contributorsPerLine": 7,

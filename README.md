@@ -1,5 +1,5 @@
 # WebPageTest GitHub Action
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
 
 ⚡️🚀 GitHub Action to print [webPageTest.org](https://www.webpagetest.org/) results as a commit comment after a push.
 
@@ -110,6 +110,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://twitter.com/markusstaab"><img src="https://avatars2.githubusercontent.com/u/120441?v=4" width="100px;" alt="Markus Staab"/><br /><sub><b>Markus Staab</b></sub></a><br /><a href="https://github.com/JCofman/webPagetestAction/commits?author=staabm" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://jcofman.de"><img src="https://avatars2.githubusercontent.com/u/2118956?v=4" width="100px;" alt="Jacob Cofman"/><br /><sub><b>Jacob Cofman</b></sub></a><br /><a href="https://github.com/JCofman/webPagetestAction/commits?author=JCofman" title="Documentation">📖</a> <a href="https://github.com/JCofman/webPagetestAction/commits?author=JCofman" title="Code">💻</a> <a href="#example-JCofman" title="Examples">💡</a></td>
   </tr>
 </table>
 

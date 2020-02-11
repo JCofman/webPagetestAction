@@ -1,0 +1,9 @@
+name: "WebPageTest Action"
+description: "Print webPagetest.org results as commit comment"
+author: "JCofman"
+runs:
+  using: "docker"
+  image: "Dockerfile"
+branding:
+  icon: "zap"
+  color: "gray-dark"

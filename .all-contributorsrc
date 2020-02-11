@@ -1,0 +1,35 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "staabm",
+      "name": "Markus Staab",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/120441?v=4",
+      "profile": "https://twitter.com/markusstaab",
+      "contributions": [
+        "doc",
+        "ideas"
+      ]
+    },
+    {
+      "login": "JCofman",
+      "name": "Jacob Cofman",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2118956?v=4",
+      "profile": "https://jcofman.de",
+      "contributions": [
+        "doc",
+        "code",
+        "example"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "webPagetestAction",
+  "projectOwner": "JCofman",
+  "repoType": "github",
+  "repoHost": "https://github.com"
+}

@@ -7,7 +7,7 @@ const argv = tools.arguments;
 const { event, payload, sha } = tools.context;
 
 // check pre-requirements
-if (!checkForMissingEnv) tools.exit.failure("Failed!");
+if (!checkForMissingEnv()) tools.exit.failure("Failed!");
 
 // run the script
 runAudit();

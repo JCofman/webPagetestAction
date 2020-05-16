@@ -106,14 +106,18 @@ jobs:
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://twitter.com/markusstaab"><img src="https://avatars2.githubusercontent.com/u/120441?v=4" width="100px;" alt="Markus Staab"/><br /><sub><b>Markus Staab</b></sub></a><br /><a href="https://github.com/JCofman/webPagetestAction/commits?author=staabm" title="Documentation">📖</a> <a href="#ideas-staabm" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="https://jcofman.de"><img src="https://avatars2.githubusercontent.com/u/2118956?v=4" width="100px;" alt="Jacob Cofman"/><br /><sub><b>Jacob Cofman</b></sub></a><br /><a href="https://github.com/JCofman/webPagetestAction/commits?author=JCofman" title="Documentation">📖</a> <a href="https://github.com/JCofman/webPagetestAction/commits?author=JCofman" title="Code">💻</a> <a href="#example-JCofman" title="Examples">💡</a></td>
+    <td align="center"><a href="https://twitter.com/markusstaab"><img src="https://avatars2.githubusercontent.com/u/120441?v=4" width="100px;" alt=""/><br /><sub><b>Markus Staab</b></sub></a><br /><a href="https://github.com/JCofman/webPagetestAction/commits?author=staabm" title="Documentation">📖</a> <a href="#ideas-staabm" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://jcofman.de"><img src="https://avatars2.githubusercontent.com/u/2118956?v=4" width="100px;" alt=""/><br /><sub><b>Jacob Cofman</b></sub></a><br /><a href="https://github.com/JCofman/webPagetestAction/commits?author=JCofman" title="Documentation">📖</a> <a href="https://github.com/JCofman/webPagetestAction/commits?author=JCofman" title="Code">💻</a> <a href="#example-JCofman" title="Examples">💡</a></td>
+    <td align="center"><a href="https://github.com/boyum"><img src="https://avatars2.githubusercontent.com/u/9085189?v=4" width="100px;" alt=""/><br /><sub><b>Sindre Bøyum</b></sub></a><br /><a href="https://github.com/JCofman/webPagetestAction/commits?author=boyum" title="Code">💻</a></td>
   </tr>
 </table>
 
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

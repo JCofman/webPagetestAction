@@ -25,11 +25,21 @@
         "code",
         "example"
       ]
+    },
+    {
+      "login": "boyum",
+      "name": "Sindre Bøyum",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/9085189?v=4",
+      "profile": "https://github.com/boyum",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
   "projectName": "webPagetestAction",
   "projectOwner": "JCofman",
   "repoType": "github",
-  "repoHost": "https://github.com"
+  "repoHost": "https://github.com",
+  "skipCi": true
 }

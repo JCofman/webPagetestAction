@@ -1,4 +1,10 @@
-# WebPageTest GitHub Action
+# ⚠️ Deprecated!
+
+Since webpagetest has a paid business model now you may want to checkout their official github action. You can still use this action if you have a valid WebPageTest API key or set up your own [WebPageTest instance](https://docs.webpagetest.org/private-instances/)
+
+- [Webpagetest official action](https://github.com/marketplace/actions/webpagetest-github-action)
+
+## WebPageTest GitHub Action
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
 
 ⚡️🚀 GitHub Action to print [webPageTest.org](https://www.webpagetest.org/) results as a commit comment after a push.
